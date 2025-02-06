@@ -1,0 +1,25 @@
+{
+  "name": "loobaa",
+  "version": "1.0.0",
+  "main": "dist/balancer.js",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "dev:balancer": "npm run build && nodemon dist/balancer.js",
+    "start:balancer": "npm run build && node dist/balancer.js",
+    "start:server1": "npm run build && node dist/server-1.js",
+    "start:server2": "npm run build && node dist/server-2.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "nodemon": "^3.1.9"
+  }
+}
