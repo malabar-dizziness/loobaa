@@ -7,8 +7,7 @@
     "build:watch": "tsc --watch",
     "dev:balancer": "npm run build && nodemon dist/balancer.js",
     "start:balancer": "npm run build && node dist/balancer.js",
-    "start:server1": "npm run build && node dist/server-1.js",
-    "start:server2": "npm run build && node dist/server-2.js"
+    "start:servers": "npm run build && node dist/server.js"
   },
   "keywords": [],
   "author": "",

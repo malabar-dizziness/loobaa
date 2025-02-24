@@ -15,3 +15,7 @@ app.get('/', (req, res) => {
     const data = { message: `Hello from web server running at localhost:${req.socket.localPort}` };
     res.render('webpage', data);
 })
+
+app.get('/health', (_, res) => {
+    res.status(200).send();
+})
