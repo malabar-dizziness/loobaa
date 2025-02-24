@@ -5,11 +5,19 @@ import { checkIsServiceUnavailableError, withRetry } from "./utils/helpers";
 const app = express();
 const PORT = 80;
 
-const getServerAddress = getHealthyServers([
-  "http://localhost:8080",
-  "http://localhost:8081",
-  "http://localhost:8082",
-]);
+const healthCheckPeriod = parseInt(
+  process.argv
+    .find((arg) => arg.startsWith("--health-check-period="))
+    ?.split("=")[1] || "60000",
+  10
+);
+
+console.log(`Health check period is set to: ${healthCheckPeriod}ms`);
+
+const getServerAddress = getHealthyServers(
+  ["http://localhost:8080", "http://localhost:8081", "http://localhost:8082"],
+  healthCheckPeriod
+);
 
 app.get("/", async (req, res) => {
   console.log("Received request from", req.ip);

@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "dev:balancer": "npm run build && nodemon dist/balancer.js",
+    "dev:balancer": "npm run build && nodemon dist/balancer.js --health-check-period=5000",
     "start:balancer": "npm run build && node dist/balancer.js",
     "start:servers": "npm run build && node dist/server.js"
   },

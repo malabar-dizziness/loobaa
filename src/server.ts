@@ -6,6 +6,6 @@ const server = (port: number) => {
     })
 }
 
-for (var i = 8080; i<=8082 ; i++) {
+for (var i = 8080; i<=8082; i++) {
     server(i)
 }

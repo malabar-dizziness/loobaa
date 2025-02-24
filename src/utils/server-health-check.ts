@@ -1,5 +1,8 @@
 // Uses Round Robin algorithm
-export const getHealthyServers = (arr: string[]) => {
+export const getHealthyServers = (
+  arr: string[],
+  healthCheckPeriod?: number
+) => {
   let healthyServers = new Set(arr);
   let unhealthyServers = new Set<string>();
   let index = 0;
@@ -24,7 +27,7 @@ export const getHealthyServers = (arr: string[]) => {
         console.log(`Server ${server} is healthy again.`);
       });
     });
-  }, 60000);
+  }, healthCheckPeriod || 60000);
 
   return () => {
     if (healthyServers.size === 0) {
