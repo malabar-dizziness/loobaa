@@ -29,7 +29,7 @@ npm run start:balancer
 
 **Note** \
 If the number of servers are changed, make sure to add the server baseUrls here:
-https://github.com/malabar-dizziness/loobaa/blob/bbee87e17fdba9c0d246275df5725a8fdd58709c/src/balancer.ts#L17-L20
+https://github.com/malabar-dizziness/loobaa/blob/f39236b1a5b1a18fa3676e76770d7db34a5933ce/src/balancer.ts#L17-L20
 
 ### To test the loobaa's efficiency
 bash
