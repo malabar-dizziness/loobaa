@@ -1,44 +1,15 @@
 import express from "express";
+import { getHealthyServers } from "./utils/server-health-check";
+import { checkIsServiceUnavailableError, withRetry } from "./utils/helpers";
 
 const app = express();
 const PORT = 80;
-
-// Uses Round Robin algorithm
-const getHealthyServers = (arr: string[]) => {
-  let servers = arr;
-  let index = 0;
-
-  setInterval(() => {
-    servers.forEach((server) => {
-      fetch(`${server}/health`).catch(() => {
-        servers = servers.filter((s) => s !== server);
-      });
-    });
-  }, 10000);
-
-  return () => {
-    if (index >= servers.length) index = 0;
-
-    return servers[index++];
-  };
-};
 
 const getServerAddress = getHealthyServers([
   "http://localhost:8080",
   "http://localhost:8081",
   "http://localhost:8082",
 ]);
-
-const withRetry = async (fn: () => Promise<void>, retry: number) => {
-  try {
-    await fn();
-  } catch (e) {
-    if (retry <= 0) {
-      throw e;
-    }
-    withRetry(fn, --retry);
-  }
-};
 
 app.get("/", async (req, res) => {
   console.log("Received request from", req.ip);
@@ -47,12 +18,23 @@ app.get("/", async (req, res) => {
   console.log("User Agent:", req.get("User-agent"));
 
   const fetchResponse = async () => {
-    const response = await fetch(getServerAddress());
+    const response = (await Promise.race([
+      fetch(getServerAddress()),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 5000)
+      ),
+    ])) as Response;
     const resParsed = await response.text();
     res.send(resParsed);
   };
 
-  await withRetry(fetchResponse, 2);
+  try {
+    await withRetry(fetchResponse, 2);
+  } catch (e) {
+    checkIsServiceUnavailableError(e, () =>
+      res.status(503).send("Service unavailable")
+    );
+  }
 });
 
 app.listen(PORT, () => {
